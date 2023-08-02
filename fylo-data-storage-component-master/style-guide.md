@@ -13,6 +13,8 @@ The designs were created to the following widths:
 
 - Gradient: hsl(6, 100%, 80%) to hsl(335, 100%, 65%)
 
+#FFA399 to #FF4D97
+
 ### Neutral
 
 - Pale Blue: hsl(243, 100%, 93%)

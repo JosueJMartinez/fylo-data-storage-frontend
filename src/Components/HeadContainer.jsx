@@ -24,8 +24,8 @@ function HeadContainer() {
 		{ logo: UploadIcon, alt: 'Upload' },
 	];
 	return (
-		<div className='header-container w-100 mx-2 text-light mb-3'>
-			<div className='w-75 h-100 mx-auto my-4'>
+		<div className='header-container w-100 mx-2 text-light mb-3 mb-md-0'>
+			<div className='w-75 h-100 mx-auto my-5'>
 				<h1>
 					<img src={LogoIcon} alt='Logo' className='svg-icon'></img>
 				</h1>

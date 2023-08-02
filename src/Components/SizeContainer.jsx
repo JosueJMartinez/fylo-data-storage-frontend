@@ -1,52 +1,94 @@
-// import LogoIcon from '../images/logo.svg';
-import FolderIcon from '../images/icon-folder.svg';
-import DocumentIcon from '../images/icon-document.svg';
-import UploadIcon from '../images/icon-upload.svg';
+import { useRef, useState, useLayoutEffect, useEffect } from 'react';
+import { ProgressBar } from 'react-bootstrap';
 
-/* function ListIcon({ item }) {
-	const { logo, alt } = item;
-
-	const getIconHtml = () => {
-		if (logo === FolderIcon)
-			return <img src={logo} alt={alt} className='svg-icon folder-icon'></img>;
-		else if (logo === DocumentIcon)
-			return <img src={logo} alt={alt} className='svg-icon document-icon'></img>;
-		else return <img src={logo} alt={alt} className='svg-icon upload-icon'></img>;
+function SizeContainer({ value }) {
+	const fillerStyles = {
+		width: `${value / 10}%`,
 	};
+	const [widthOfGB, setWidthOfGB] = useState(0);
+	const [windowSize, setWindowSize] = useState(window.innerWidth);
+	const [divStyle, setDivStyle] = useState({});
+	const [isInitialLoad, setIsInitialLoad] = useState(true);
+	const ref = useRef(null);
+	// let divStyle = `left:-${widthOfGB/windowSize*100/2}`;
 
-	return <div className='icons'>{getIconHtml()}</div>;
-} */
+	useEffect(() => {
+		const handleWindowResize = () => {
+			console.log('in here le' + window.innerWidth);
+			if (window.innerWidth < 767) {
+				setWindowSize([window.innerWidth]);
+				// setDivStyle(`-${((widthOfGB / windowSize) * 100) / 2}%`);
+				setDivStyle({ left: `-${widthOfGB / 2}px` });
+			} else {
+				console.log('not in here le' + window.innerWidth);
+				setDivStyle({});
+			}
+		};
 
-function SizeContainer() {
-	const listIcons = [
-		{ logo: DocumentIcon, alt: 'Document' },
-		{ logo: FolderIcon, alt: 'Folder' },
-		{ logo: UploadIcon, alt: 'Upload' },
-	];
+		window.addEventListener('resize', handleWindowResize);
+
+		return () => {
+			window.removeEventListener('resize', handleWindowResize);
+		};
+	}, [widthOfGB, windowSize]);
+
+	useEffect(() => {
+		const handleInitialLoad = () => {
+			if (isInitialLoad) {
+				setIsInitialLoad(false);
+				if (window.innerWidth < 767) {
+					console.log('inital' + window.innerWidth);
+					setWindowSize([window.innerWidth]);
+					// setDivStyle(`-${((widthOfGB / windowSize) * 100) / 2}%`);
+					setDivStyle({ left: `-${widthOfGB / 2}px` });
+				} else {
+					console.log('not initial' + window.innerWidth);
+					setDivStyle({});
+				}
+			}
+		};
+
+		handleInitialLoad();
+
+		return () => {};
+	}, [isInitialLoad, widthOfGB, windowSize]);
+
+	useLayoutEffect(() => {
+		setWidthOfGB(ref.current.offsetWidth);
+	}, []);
+
 	return (
 		<div className='size-container w-100 mx-2 text-light'>
-			<div className='w-75 h-100 mx-auto my-4'>
+			<div className='mx-auto size-container-inner'>
 				<p>
-					You've used <span className='fw-bold'>815 GB</span> of your storage
+					You've used <span className='fw-bold'>{value} GB</span> of your storage
 				</p>
-				<div class='progress'>
-					<div
-						class='progress-bar'
-						role='progressbar'
-						style='width: 25%;'
-						aria-valuenow='25'
-						aria-valuemin='0'
-						aria-valuemax='100'
-					>
-						25%
+				<ProgressBar>
+					{/* Add custom elements inside the progress bar */}
+					<div className='custom-filler' style={fillerStyles}>
+						<div className='ball-marker'></div>
+					</div>
+				</ProgressBar>
+				<div className='d-flex justify-content-between'>
+					<div className='size-marker'>
+						0 <span className='size-marker-unit'>GB</span>
+					</div>
+					<div className='size-marker'>
+						1000 <span className='size-marker-unit'>GB</span>
 					</div>
 				</div>
-				{/* <div className='d-flex flex-row align-items-start'> */}
-				{/* {listIcons.map((item, index) => (
-					<ListIcon key={index} item={item} />
-				))} */}
-				{/* </div> */}
 			</div>
+			{console.log(divStyle)}
+			<div className='gb-left'>
+				<div className='gb-left-inner' ref={ref} style={divStyle}>
+					<div className='gb-left-value'>
+						<span className='gb-left-number'>{1000 - value}</span>{' '}
+						<span className='gb-left-units'>GB LEFT</span>
+					</div>
+				</div>
+			</div>
+
+			{/* {console.log(getWidthGBLeft())} */}
 		</div>
 	);
 }
