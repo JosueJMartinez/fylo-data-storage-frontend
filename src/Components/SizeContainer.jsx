@@ -6,62 +6,76 @@ function SizeContainer({ value }) {
 		width: `${value / 10}%`,
 	};
 	const [widthOfGB, setWidthOfGB] = useState(0);
-	const [windowSize, setWindowSize] = useState(window.innerWidth);
+	const [heightOfGB, setHeightOfGB] = useState(0);
+	// const [windowSize, setWindowSize] = useState(window.innerWidth);
+	const [widthGBContainer, setWidthGBContainer] = useState(0);
+	const [heightGBContainer, setHeightGBContainer] = useState(0);
 	const [divStyle, setDivStyle] = useState({});
 	const [isInitialLoad, setIsInitialLoad] = useState(true);
-	const ref = useRef(null);
-	// let divStyle = `left:-${widthOfGB/windowSize*100/2}`;
+	const gbLeftRef = useRef(null);
+	const gbContainerRef = useRef(null);
+	
 
+	// resize useEffect
 	useEffect(() => {
 		const handleWindowResize = () => {
-			console.log('in here le' + window.innerWidth);
 			if (window.innerWidth < 767) {
-				setWindowSize([window.innerWidth]);
-				// setDivStyle(`-${((widthOfGB / windowSize) * 100) / 2}%`);
 				setDivStyle({ left: `-${widthOfGB / 2}px` });
 			} else {
-				console.log('not in here le' + window.innerWidth);
-				setDivStyle({});
+				setWidthGBContainer(gbContainerRef.current.offsetWidth);
+				setDivStyle({
+					left: `${widthGBContainer / 2 - 25 - widthOfGB}px`,
+					top: `-${heightGBContainer + heightOfGB / 5}px`,
+				});
 			}
 		};
-
+		const handleInitialLoad = () => {
+			if (isInitialLoad) {
+				setIsInitialLoad(false);
+				if (window.innerWidth < 767) {
+					setDivStyle({ left: `-${widthOfGB / 2}px` });
+				} else {
+					setDivStyle({
+						left: `${widthGBContainer / 2 - 25 - widthOfGB}px`,
+						top: `-${heightGBContainer + heightOfGB / 5}px`,
+					});
+				}
+			}
+		};
+		handleInitialLoad();
 		window.addEventListener('resize', handleWindowResize);
 
 		return () => {
 			window.removeEventListener('resize', handleWindowResize);
 		};
-	}, [widthOfGB, windowSize]);
-
-	useEffect(() => {
-		const handleInitialLoad = () => {
-			if (isInitialLoad) {
-				setIsInitialLoad(false);
-				if (window.innerWidth < 767) {
-					console.log('inital' + window.innerWidth);
-					setWindowSize([window.innerWidth]);
-					// setDivStyle(`-${((widthOfGB / windowSize) * 100) / 2}%`);
-					setDivStyle({ left: `-${widthOfGB / 2}px` });
-				} else {
-					console.log('not initial' + window.innerWidth);
-					setDivStyle({});
-				}
-			}
-		};
-
-		handleInitialLoad();
-
-		return () => {};
-	}, [isInitialLoad, widthOfGB, windowSize]);
+	}, [widthOfGB, widthGBContainer, isInitialLoad, heightOfGB, heightGBContainer]);
 
 	useLayoutEffect(() => {
-		setWidthOfGB(ref.current.offsetWidth);
+		setWidthOfGB(gbLeftRef.current.offsetWidth);
+		setHeightOfGB(gbLeftRef.current.offsetHeight);
+		setWidthGBContainer(gbContainerRef.current.offsetWidth);
+		setHeightGBContainer(gbContainerRef.current.offsetHeight);
 	}, []);
+
+	const reformatSize = props => {
+		const arr = props.valueToFormat.split('');
+
+		let revArr = [...arr].reverse();
+
+		revArr = revArr.map((elem, idx) => <span className={`gb-${idx}`}>{elem}</span>);
+
+		return <span className={props.spanClass}>{revArr.reverse().map(elem => elem)}</span>;
+	};
 
 	return (
 		<div className='size-container w-100 mx-2 text-light'>
-			<div className='mx-auto size-container-inner'>
+			<div className='mx-auto size-container-inner' ref={gbContainerRef}>
 				<p>
-					You've used <span className='fw-bold'>{value} GB</span> of your storage
+					You've used{' '}
+					<span className='fw-bold'>
+						{reformatSize({ valueToFormat: value, spanClass: 'amount-used' })} GB
+					</span>{' '}
+					of your storage
 				</p>
 				<ProgressBar>
 					{/* Add custom elements inside the progress bar */}
@@ -78,17 +92,16 @@ function SizeContainer({ value }) {
 					</div>
 				</div>
 			</div>
-			{console.log(divStyle)}
 			<div className='gb-left'>
-				<div className='gb-left-inner' ref={ref} style={divStyle}>
-					<div className='gb-left-value'>
-						<span className='gb-left-number'>{1000 - value}</span>{' '}
+				<div className='gb-left-inner' ref={gbLeftRef} style={divStyle}>
+					<div className='gb-left-value px-4'>
+						<span className='gb-left-number'>
+							{reformatSize({ valueToFormat: 1000 - value + '', spanClass: 'amount-left' })}
+						</span>{' '}
 						<span className='gb-left-units'>GB LEFT</span>
 					</div>
 				</div>
 			</div>
-
-			{/* {console.log(getWidthGBLeft())} */}
 		</div>
 	);
 }

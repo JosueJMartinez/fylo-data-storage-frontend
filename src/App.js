@@ -7,7 +7,7 @@ import SizeContainer from './Components/SizeContainer';
 // import './styles/custom-bootstrap.scss';
 
 function App() {
-	const value = '650';
+	const value = '555';
 	return (
 		<div className='App'>
 			<div className='desktop-background' />

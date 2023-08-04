@@ -6,29 +6,23 @@
 @import '~bootstrap/scss/mixins';
 
 // Default variable overrides
-// $primary: hsl(234, 29%, 20%);
+
 $body-bg: hsl(229, 57%, 11%);
 
-// $body-color: #111;
+
 $light: white;
 
-// Required
-// @import '~bootstrap/scss/variables';
-// @import '~bootstrap/scss/variables-dark';
-// @import '~bootstrap/scss/maps';
-// @import '~bootstrap/scss/mixins';
 
-// @import '~bootstrap/scss/root';
 
 // // Optional Bootstrap components here
 @import '~bootstrap/scss/reboot';
 @import '~bootstrap/scss/type';
 @import '~bootstrap/scss/utilities';
-// etc
-// @import '~bootstrap/scss/bootstrap.scss';
 @import 'bootstrap';
 
-
+*{
+	font-family: 'Outfit', sans-serif;
+}
 
 body {
 	font-family: 'Roboto', sans-serif;
@@ -61,7 +55,7 @@ body {
 	background-color: hsl(228, 56%, 26%);
 	border-radius: 10px;
 	color: hsl(243, 100%, 93%) !important;
-	&-inner{
+	&-inner {
 		width: 80%;
 		padding: 25px 0 50px 0;
 	}
@@ -70,20 +64,6 @@ body {
 h1 {
 	font-size: 2rem;
 	line-height: 4rem;
-}
-
-.form-control {
-	&:active &:hover,
-	&:focus {
-		border: 1px solid hsl(234, 29%, 20%);
-		box-shadow: none;
-	}
-}
-
-
-
-.text-primary {
-	color: hsl(234, 29%, 20%) !important;
 }
 
 .icons {
@@ -143,10 +123,10 @@ h1 {
 	left: 50%;
 	width: 0;
 	height: 0;
-	&-inner{
+	&-inner {
 		border-radius: 7px;
 		background-color: #fff;
-		position:absolute;
+		position: absolute;
 		// width: fit-content;
 		height: auto;
 		white-space: nowrap;
@@ -156,6 +136,7 @@ h1 {
 	}
 	&-number {
 		font-size: 45px;
+		font-weight: 700;
 		// position: relative;
 		// top: 0px;
 	}
@@ -163,29 +144,41 @@ h1 {
 		// font-size: 30px;
 		position: relative;
 		top: -7px;
+		color: hsl(229, 7%, 55%);
+	}
+}
+.amount {
+	&-left {
+		.gb {
+			&-0 {
+				position: relative;
+				top: 2px;
+			}
+			&-1 {
+				position: relative;
+				top: -2px;
+			}
+		}
+	}
+	&-used {
+		.gb {
+			&-0 {
+				position: relative;
+				top: 2px;
+			}
+			&-1 {
+				position: relative;
+				top: 1px;
+			}
+		}
 	}
 }
 .full-app {
 	position: relative;
 	z-index: 1;
-	&-inner{
+	&-inner {
 		width: 100%;
 	}
-}
-
-@media (min-width: 376px) {
-	/* 
-	.sm-rounded-5 {
-		border-radius: 32px;
-	}
-	.container-sm {
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    width: 100%;
-    padding-right: calc(var(--bs-gutter-x) * 0.5);
-    padding-left: calc(var(--bs-gutter-x) * 0.5);
-	}
-	*/
 }
 
 @media (min-width: 768px) {
@@ -198,30 +191,40 @@ h1 {
 	.desktop-background {
 		display: block;
 	}
-	.header-container{
-		width: 60%!important;
+	.header-container {
+		width: 60% !important;
 	}
 	.full-app {
 		width: 70%;
 	}
-	.gb-left{
+	.gb-left {
 		// top: 42%;
 		// left: 75%;
 		position: relative;
 		height: auto !important;
 		width: auto !important;
-		padding-right:20px;
-		padding-left:20px;
+		padding-right: 20px;
+		padding-left: 20px;
 	}
-	.size-container-inner{
+	.size-container-inner {
 		width: 90%;
 		padding: 25px;
 	}
 
-	/* .vh-md-auto {
-    height: auto !important;
-  }
-	.img-md-auto{
-		height:auto !important;
-	} */
+	.gb-left {
+		&-inner {
+			border-bottom-right-radius: 0;
+			&::after {
+				content: '';
+
+				position: absolute;
+				right: 0;
+				top: 100%;
+				border-top: 14px solid white;
+				border-bottom: none;
+				border-left: 14px solid transparent;
+				// border-right: 0px solid transparent;
+			}
+		}
+	}
 }
